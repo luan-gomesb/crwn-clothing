@@ -2,6 +2,7 @@ import Home from "./routes/home.component";
 import { Routes, Route, Outlet, Link } from "react-router-dom";
 import Navigation from "./components/navigation/Navigation.component";
 import SignIn from "./components/sign-in/SignIn.component";
+import SignUpForm from "./components/sign-up-form/sign-up-form.component";
 
 const Shop = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="product" element={<Product />} />
         </Route>
         <Route path="sign-in" element={<SignIn/ >}></Route>
+        <Route path="sign-up" element={<SignUpForm/ >}></Route>
       </Route>
     </Routes>
   );
