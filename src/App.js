@@ -1,6 +1,7 @@
 import Home from "./routes/home.component";
 import { Routes, Route, Outlet, Link } from "react-router-dom";
 import Navigation from "./components/navigation/Navigation.component";
+import SignIn from "./components/sign-in/SignIn.component";
 
 const Shop = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="shop" element={<Shop />} >
           <Route path="product" element={<Product />} />
         </Route>
+        <Route path="sign-in" element={<SignIn/ >}></Route>
       </Route>
     </Routes>
   );
