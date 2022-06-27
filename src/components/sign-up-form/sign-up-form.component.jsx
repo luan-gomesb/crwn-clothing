@@ -1,53 +1,79 @@
 import { useState } from "react"
+import { createUserWithMailAndPass, saveLoginInfo } from "../../utils/firebase.utils";
+import FormInput from "../form-input/form-input.component";
+
 const initialFields = {
-  displayName:'', mail:'',password:'',confirmPassword:''
+  displayName: '', mail: '', password: '', confirmPassword: ''
 }
- const SignUpForm = () => {
-  const [formFields,setFormFields] = useState(initialFields);
+
+const SignUpForm = () => {
+  const [formFields, setFormFields] = useState(initialFields);
   const { displayName, mail, password, confirmPassword } = formFields;
-  const handleFormSubmit = (event) => {
+
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
-    console.log(formFields);
+    if (password != confirmPassword) {
+      alert('Passwords fields are different!');
+      return false;
+    }
 
-  } 
-  const handleFieldChange = (event) => {
-    const {name,value} = event.target;
-    setFormFields({...formFields,[name]:value});
+    try {
+      
+   const userCredentialRes = await createUserWithMailAndPass(mail,password);
+    if(userCredentialRes){
+      const { user}  = userCredentialRes;
+      
+        saveLoginInfo(user, {displayName});
+    }
+   } catch (error) {
+    console.log(error)  
+    }
+  
   }
-  return (
 
+  const handleFieldChange = (event) => {
+    const { name, value } = event.target;
+    setFormFields({ ...formFields, [name]: value });
+  }
+
+  return (
     <div>
       <form onSubmit={handleFormSubmit}>
-        <label htmlFor="displayName">Name</label>
-        <input type="text"
-        name="displayName" 
-        id="displayName"
-        value={displayName}
-        onChange={handleFieldChange} />
+        <h1>Sign Up with Email and Password</h1>
+        <FormInput
+          label='Display Name'
+          type="text" required={true}
+          name="displayName"
+          id="displayName"
+          value={displayName}
+          onChange={handleFieldChange} />
 
-        <label htmlFor="mail">Mail</label>
-      <input type="mail"
-        name="mail" 
-        id="mail"
-        value={mail}
-        onChange={handleFieldChange} />
+        <FormInput 
+          label="Email"
+          type="mail" required={true}
+          name="mail"
+          id="mail"
+          value={mail}
+          onChange={handleFieldChange} />
 
-        <label htmlFor="password">Password</label>
-      <input type="password"
-        name="password" 
-        id="password"
-        value={password}
-        onChange={handleFieldChange} />
+        <FormInput
+          label="Password"
+          type="password" required={true}
+          name="password"
+          id="password"
+          value={password}
+          onChange={handleFieldChange} />
 
-        <label htmlFor="confirmPassword">Confirm Password</label>
-      <input type="password"
-        name="confirmPassword" 
-        id="confirmPassword"
-        value={confirmPassword}
-        onChange={handleFieldChange} />
+        <FormInput 
+          label="Confirm Password"
+          type="password" required={true}
+          name="confirmPassword"
+          id="confirmPassword"
+          value={confirmPassword}
+          onChange={handleFieldChange} />
 
-      <button type="submit">Register</button>
-</form>
+        <button type="submit">Register</button>
+      </form>
     </div>
   )
 }
